@@ -1,0 +1,24 @@
+version: "3"
+services:
+
+  server:
+    build: .
+    image: powerdns/dnsdist-18-redis
+    restart: always
+    volumes:
+      - ./conf:/etc/dnsdist
+    ports:
+      - 53:53/udp
+
+
+  redis:
+    image: redis:7
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning 
+    volumes: 
+      - cache:/data
+
+volumes:
+  cache:
